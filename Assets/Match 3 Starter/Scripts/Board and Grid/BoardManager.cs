@@ -44,13 +44,28 @@ public class BoardManager : MonoBehaviour {
 	private void CreateBoard (float xOffset, float yOffset) {
 		tiles = new GameObject[xSize, ySize];
 
-        float startX = transform.position.x;
+		float startX = transform.position.x;
 		float startY = transform.position.y;
-
+		
+		Sprite[] previousLeft = new Sprite[ySize];
+		Sprite previousBelow = null;
+		
 		for (int x = 0; x < xSize; x++) {
 			for (int y = 0; y < ySize; y++) {
 				GameObject newTile = Instantiate(tile, new Vector3(startX + (xOffset * x), startY + (yOffset * y), 0), tile.transform.rotation);
 				tiles[x, y] = newTile;
+				newTile.transform.parent = transform;
+				
+				List<Sprite> possibleCharacters = new List<Sprite>(); // 1
+				possibleCharacters.AddRange(characters); // 2
+				possibleCharacters.Remove(previousLeft[y]); // 3
+				possibleCharacters.Remove(previousBelow);
+				
+				Sprite newSprite = possibleCharacters[Random.Range(0, possibleCharacters.Count)];
+				newTile.GetComponent<SpriteRenderer>().sprite = newSprite;
+				
+				previousLeft[y] = newSprite;
+				previousBelow = newSprite;
 			}
         }
     }
