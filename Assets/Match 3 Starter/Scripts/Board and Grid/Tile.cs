@@ -50,4 +50,20 @@ public class Tile : MonoBehaviour {
 		previousSelected = null;
 	}
 
+	void OnMouseDown() {
+		// 1
+		if (render.sprite == null || BoardManager.instance.IsShifting) {
+			return;
+		}
+
+		if (isSelected) { // 2 Is it already selected?
+			Deselect();
+		} else {
+			if (previousSelected == null) { // 3 Is it the first tile selected?
+				Select();
+			} else {
+				previousSelected.Deselect(); // 4
+			}
+		}
+	}
 }
