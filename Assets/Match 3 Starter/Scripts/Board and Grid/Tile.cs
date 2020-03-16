@@ -53,30 +53,25 @@ public class Tile : MonoBehaviour{
 	}
 
 	void OnMouseDown() {
-		// 1
 		if (render.sprite == null || BoardManager.instance.IsShifting) {
 			return;
 		}
 
 		if (isSelected) {
-			// 2 Is it already selected?
 			Deselect();
 		}
 		else {
 			if (previousSelected == null) {
-				// 3 Is it the first tile selected?
 				Select();
 			}
 			else {
 				if (GetAllAdjacentTiles().Contains(previousSelected.gameObject)) {
-					// 1
-					SwapSprite(previousSelected.render); // 2
+					SwapSprite(previousSelected.render);
 					previousSelected.ClearAllMatches();
 					previousSelected.Deselect();
 					ClearAllMatches();
 				}
 				else {
-					// 3
 					previousSelected.GetComponent<Tile>().Deselect();
 					Select();
 				}
@@ -85,16 +80,14 @@ public class Tile : MonoBehaviour{
 	}
 
 	public void SwapSprite(SpriteRenderer render2) {
-		// 1
 		if (render.sprite == render2.sprite) {
-			// 2
 			return;
 		}
 
-		Sprite tempSprite = render2.sprite; // 3
-		render2.sprite = render.sprite; // 4
-		render.sprite = tempSprite; // 5
-		SFXManager.instance.PlaySFX(Clip.Swap); // 6
+		Sprite tempSprite = render2.sprite;
+		render2.sprite = render.sprite;
+		render.sprite = tempSprite;
+		SFXManager.instance.PlaySFX(Clip.Swap);
 	}
 
 	private GameObject GetAdjacent(Vector2 castDir) {
@@ -125,20 +118,20 @@ public class Tile : MonoBehaviour{
 		return matchingTiles;
 	}
 	
-	private void ClearMatch(Vector2[] paths) // 1
+	private void ClearMatch(Vector2[] paths)
 	{
-		List<GameObject> matchingTiles = new List<GameObject>(); // 2
-		for (int i = 0; i < paths.Length; i++) // 3
+		List<GameObject> matchingTiles = new List<GameObject>();
+		for (int i = 0; i < paths.Length; i++)
 		{
 			matchingTiles.AddRange(FindMatch(paths[i]));
 		}
-		if (matchingTiles.Count >= 2) // 4
+		if (matchingTiles.Count >= 2)
 		{
-			for (int i = 0; i < matchingTiles.Count; i++) // 5
+			for (int i = 0; i < matchingTiles.Count; i++)
 			{
 				matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
 			}
-			matchFound = true; // 6
+			matchFound = true;
 		}
 	}
 	
