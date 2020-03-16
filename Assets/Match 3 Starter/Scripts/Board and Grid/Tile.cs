@@ -107,7 +107,7 @@ public class Tile : MonoBehaviour{
 
 		return adjacentTiles;
 	}
-	
+
 	private List<GameObject> FindMatch(Vector2 castDir) {
 		List<GameObject> matchingTiles = new List<GameObject>();
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, castDir);
@@ -115,35 +115,36 @@ public class Tile : MonoBehaviour{
 			matchingTiles.Add(hit.collider.gameObject);
 			hit = Physics2D.Raycast(hit.collider.transform.position, castDir);
 		}
+
 		return matchingTiles;
 	}
-	
-	private void ClearMatch(Vector2[] paths)
-	{
+
+	private void ClearMatch(Vector2[] paths) {
 		List<GameObject> matchingTiles = new List<GameObject>();
-		for (int i = 0; i < paths.Length; i++)
-		{
+		for (int i = 0; i < paths.Length; i++) {
 			matchingTiles.AddRange(FindMatch(paths[i]));
 		}
-		if (matchingTiles.Count >= 2)
-		{
-			for (int i = 0; i < matchingTiles.Count; i++)
-			{
+
+		if (matchingTiles.Count >= 2) {
+			for (int i = 0; i < matchingTiles.Count; i++) {
 				matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
 			}
+
 			matchFound = true;
 		}
 	}
-	
+
 	public void ClearAllMatches() {
 		if (render.sprite == null)
 			return;
 
-		ClearMatch(new Vector2[2] { Vector2.left, Vector2.right });
-		ClearMatch(new Vector2[2] { Vector2.up, Vector2.down });
+		ClearMatch(new Vector2[2] {Vector2.left, Vector2.right});
+		ClearMatch(new Vector2[2] {Vector2.up, Vector2.down});
 		if (matchFound) {
 			render.sprite = null;
 			matchFound = false;
+			StopCoroutine(BoardManager.instance.FindNullTiles());
+			StartCoroutine(BoardManager.instance.FindNullTiles());
 			SFXManager.instance.PlaySFX(Clip.Clear);
 		}
 	}
