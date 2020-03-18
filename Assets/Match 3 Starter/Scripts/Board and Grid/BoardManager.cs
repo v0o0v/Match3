@@ -79,9 +79,16 @@ public class BoardManager : MonoBehaviour {
 				}
 			}
 		}
+		
+		for (int x = 0; x < xSize; x++) {
+			for (int y = 0; y < ySize; y++) {
+				tiles[x, y].GetComponent<Tile>().ClearAllMatches();
+			}
+		}
+
 	}
 	
-	private IEnumerator ShiftTilesDown(int x, int yStart, float shiftDelay = .01f) {
+	private IEnumerator ShiftTilesDown(int x, int yStart, float shiftDelay = .03f) {
 		IsShifting = true;
 		List<SpriteRenderer>  renders = new List<SpriteRenderer>();
 		int nullCount = 0;
